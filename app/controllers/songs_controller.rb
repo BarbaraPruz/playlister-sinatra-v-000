@@ -28,10 +28,11 @@ class SongsController < ApplicationController
     @song = Song.find_by_slug(params[:slug])
     @song.name = params[:song_name]
     @song.artist = Artist.find_or_create_by(name: params[:artist_name])
-    @song.genres.clear
-    @params[:genres].each do | genre |
-      @song.genres.push (Genre.find(genre))
-    end
+    @song.genre_ids = params[:genres]
+#    @song.genres.clear
+#    @params[:genres].each do | genre |
+#      @song.genres.push (Genre.find(genre))
+#    end
     @song.save
     flash[:message] = "Successfully updated song."
     redirect :"/songs/#{@song.slug}"
@@ -40,9 +41,10 @@ class SongsController < ApplicationController
   post '/songs' do
     @song = Song.new(name: params[:song_name])
     @song.artist = Artist.find_or_create_by(name: params[:artist_name])
-    params[:genres].each do | genre_id |
-      @song.genres.push (Genre.find(genre_id))
-    end
+    @song.genre_ids = params[:genres]
+#    params[:genres].each do | genre_id |
+#      @song.genres.push (Genre.find(genre_id))
+#    end
     @song.save
     flash[:message] = "Successfully created song."
     redirect :"/songs/#{@song.slug}"
