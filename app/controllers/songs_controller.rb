@@ -27,11 +27,11 @@ class SongsController < ApplicationController
   patch '/songs/:slug' do
     @song = Song.find_by_slug(params[:slug])
     @song.name = params[:song_name]
-    if @song.artist.name != params[:artist_name]
-      artist = Artist.find_by(name: params[:artist_name])
-      artist = Artist.create(name: params[:artist_name]) if !artist
-      @song.artist = artist
-    end
+    @song.artist = Artist.find_or_create_by(name: params[:artist_name])
+  #    artist = Artist.find_by(name: params[:artist_name])
+  #    artist = Artist.create(name: params[:artist_name]) if !artist
+  #    @song.artist = artist
+  #  end
     @song.genres.clear
     @params[:genres].each do | genre |
       @song.genres.push (Genre.find(genre))
